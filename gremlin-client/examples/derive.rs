@@ -8,6 +8,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[derive(Debug, PartialEq, FromGValue, FromGMap)]
     struct Person {
         name: String,
+        safta_thing: i32,
     }
 
     let results = client

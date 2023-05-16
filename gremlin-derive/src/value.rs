@@ -1,3 +1,4 @@
+use convert_case::Casing;
 use quote::quote;
 use syn::{parse_quote, Data, DataStruct, DeriveInput, Fields, FieldsNamed, Stmt};
 
@@ -81,11 +82,14 @@ fn map_properties(
         .iter()
         .filter_map(|field| -> Option<Stmt> {
             let id = &field.ident.as_ref()?;
-            let id_s = id.to_string();
+            let id_s = dbg!(id.to_string().to_case(convert_case::Case::Camel));
             let ty = &field.ty;
 
             Some(parse_quote!(
-                let #id: #ty = map.try_get(#id_s)?;
+                let #id: #ty = match map.get(#id_s) {
+                    Some(x) => x.clone().try_into()?,
+                    None => Default::default()
+                };
             ))
         })
         .collect();
