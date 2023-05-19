@@ -88,6 +88,11 @@ impl TraversalBuilder {
         self
     }
 
+    pub fn id(mut self) -> Self {
+        self.bytecode.add_step(String::from("id"), vec![]);
+        self
+    }
+
     pub fn property<K, A>(mut self, key: K, value: A) -> Self
     where
         K: Into<GValue>,
